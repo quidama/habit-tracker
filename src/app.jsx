@@ -42,6 +42,14 @@ class App extends Component {
     const runningHabits = habits.filter((item) => item.count !== 0);
     this.setState({ habits, runningHabitCount: runningHabits.length });
   };
+
+  handleResetAll = () => {
+    const habits = [...this.state.habits];
+    habits.map((item) => (item.count = 0));
+    const runningHabits = habits.filter((item) => item.count !== 0);
+    this.setState({ habits, runningHabitCount: runningHabits.length });
+  };
+
   render() {
     return (
       <>
@@ -54,7 +62,7 @@ class App extends Component {
             onDecrement={this.handleDecrement}
             onDelete={this.handleDelete}
           />
-          <Reset />
+          <Reset onResetAll={this.handleResetAll} />
         </div>
       </>
     );
