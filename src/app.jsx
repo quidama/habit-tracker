@@ -14,8 +14,7 @@ class App extends Component {
   };
 
   handleAdd = (name) => {
-    const id = Math.floor(Math.random() * 1000);
-    const habit = { id: id, name: name, count: 0 };
+    const habit = { id: Date.now(), name: name, count: 0 };
     const habits = [...this.state.habits, habit];
     this.setState({ habits });
   };

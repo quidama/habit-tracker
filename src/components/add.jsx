@@ -1,28 +1,24 @@
 import React, { Component } from 'react';
 
 class Add extends Component {
-  state = {
-    input: '',
-  };
+  formRef = React.createRef();
+  inputRef = React.createRef();
 
-  handleInputChange = (event) => {
-    event.preventDefault();
-    this.setState({ input: event.target.value });
-  };
   onSubmit = (event) => {
     event.preventDefault();
-    this.props.onAdd(this.state.input);
-    this.setState({ input: '' });
+    const name = this.inputRef.current.value;
+    name && this.props.onAdd(name);
+    // this.inputRef.current.value = '';
+    this.formRef.current.reset();
   };
   render() {
     return (
-      <form className='add-form' onSubmit={this.onSubmit}>
+      <form ref={this.formRef} className='add-form' onSubmit={this.onSubmit}>
         <input
-          value={this.state.input}
+          ref={this.inputRef}
           type='text'
           className='add-input'
           placeholder='Habit'
-          onChange={this.handleInputChange}
         />
         <button type='submit' className='add-button'>
           Add
