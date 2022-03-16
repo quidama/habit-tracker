@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
 class Reset extends Component {
-  handleResetAll = () => {
-    this.props.onResetAll();
+  handleReset = () => {
+    this.props.onReset();
   };
   render() {
     return (
-      <button className='habits-reset' onClick={this.handleResetAll}>
+      <button className='habits-reset' onClick={this.handleReset}>
         Reset All
       </button>
     );
