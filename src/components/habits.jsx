@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Add from './add';
 import Habit from './habit';
-import Reset from './reset';
 
 class Habits extends Component {
   handleIncrement = (habit) => {
@@ -35,7 +34,10 @@ class Habits extends Component {
             />
           ))}
         </ul>
-        <Reset onReset={() => this.handleReset()} />
+        {/* 재사용되지 않는 부분은 component로 만들지 않는 것이 좋다. */}
+        <button className='habits-reset' onClick={this.handleReset}>
+          Reset All
+        </button>
       </>
     );
   }
