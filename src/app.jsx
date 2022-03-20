@@ -20,17 +20,34 @@ class App extends Component {
   };
 
   handleIncrement = (habit) => {
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    habits[index].count++;
+    //! 오브젝트 안의 값을 바꾸는 것은 shallow compare 시 오브젝트가
+    //! 변경되지 않아 변동이 없는 것으로 간주되어 reder를 호출하지 않는다.
+    // const habits = [...this.state.habits];
+    // const index = habits.indexOf(habit);
+    // habits[index].count++;
+    //! 새로운 오브젝트를 만들어 값을 변경하면 reder가 호출된다.
+    const habits = this.state.habits.map((item) => {
+      if (item.id === habit.id) {
+        return { ...habit, count: habit.count + 1 };
+      }
+      return item;
+    });
     this.setState({ habits });
   };
 
   handleDecrement = (habit) => {
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    const count = habits[index].count - 1;
-    habits[index].count = count < 0 ? 0 : count;
+    //! 오브젝트 안의 값을 바꾸는 것은 shallow compare 시 오브젝트가
+    //! 변경되지 않아 변동이 없는 것으로 간주되어 reder를 호출하지 않는다.
+    // const habits = [...this.state.habits];
+    // const index = habits.indexOf(habit);
+    // const count = habits[index].count - 1;
+    //! 새로운 오브젝트를 만들어 값을 변경하면 reder가 호출된다.
+    const habits = this.state.habits.map((item) => {
+      if (habit.count !== 0 && item.id === habit.id) {
+        return { ...habit, count: habit.count - 1 };
+      }
+      return item;
+    });
     this.setState({ habits });
   };
 
@@ -41,7 +58,7 @@ class App extends Component {
 
   handleReset = () => {
     const habits = this.state.habits.map((habit) => {
-      if (habit !== 0) {
+      if (habit.count !== 0) {
         return { ...habit, count: 0 };
       } else {
         return habit;
@@ -54,7 +71,9 @@ class App extends Component {
     return (
       <>
         <Navbar
-          habitCount={this.state.habits.filter((item) => item.count > 0).length}
+          habitCount={
+            this.state.habits.filter((habit) => habit.count > 0).length
+          }
         />
         <div className='habits'>
           <Habits
