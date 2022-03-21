@@ -1,93 +1,69 @@
-import { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 import './app.css';
 import Habits from './components/habits';
 import Navbar from './components/navbar';
-import { v4 as uuidv4 } from 'uuid';
 
-class App extends Component {
-  state = {
-    habits: [
-      { id: 1, name: 'Reading', count: 0 },
-      { id: 2, name: 'Running', count: 0 },
-      { id: 3, name: 'Coding', count: 0 },
-    ],
-  };
+const App = () => {
+  const [habits, setHabits] = useState([
+    { id: 1, name: 'Reading', count: 0 },
+    { id: 2, name: 'Running', count: 0 },
+    { id: 3, name: 'Coding', count: 0 },
+  ]);
 
-  handleAdd = (name) => {
-    const habit = { id: Date.now(), name: name, count: 0 };
-    const habits = [...this.state.habits, habit];
-    this.setState({ habits });
-  };
-
-  handleIncrement = (habit) => {
-    //! 오브젝트 안의 값을 바꾸는 것은 shallow compare 시 오브젝트가
-    //! 변경되지 않아 변동이 없는 것으로 간주되어 reder를 호출하지 않는다.
-    // const habits = [...this.state.habits];
-    // const index = habits.indexOf(habit);
-    // habits[index].count++;
-    //! 새로운 오브젝트를 만들어 값을 변경하면 reder가 호출된다.
-    const habits = this.state.habits.map((item) => {
+  const handleIncrement = useCallback((habit) => {
+    const _habits = habits.map((item) => {
       if (item.id === habit.id) {
         return { ...habit, count: habit.count + 1 };
       }
       return item;
     });
-    this.setState({ habits });
-  };
+    setHabits(_habits);
+  });
 
-  handleDecrement = (habit) => {
-    //! 오브젝트 안의 값을 바꾸는 것은 shallow compare 시 오브젝트가
-    //! 변경되지 않아 변동이 없는 것으로 간주되어 reder를 호출하지 않는다.
-    // const habits = [...this.state.habits];
-    // const index = habits.indexOf(habit);
-    // const count = habits[index].count - 1;
-    //! 새로운 오브젝트를 만들어 값을 변경하면 reder가 호출된다.
-    const habits = this.state.habits.map((item) => {
-      if (habit.count !== 0 && item.id === habit.id) {
-        return { ...habit, count: habit.count - 1 };
+  const handleDecrement = useCallback((habit) => {
+    const _habits = habits.map((item) => {
+      if (item.id === habit.id) {
+        const count = habit.count - 1;
+        return { ...habit, count: count < 0 ? 0 : count };
       }
       return item;
     });
-    this.setState({ habits });
-  };
+    setHabits(_habits);
+  });
 
-  handleDelete = (habit) => {
-    const habits = this.state.habits.filter((item) => item.id !== habit.id);
-    this.setState({ habits });
-  };
+  const handleDelete = useCallback((habit) => {
+    const _habits = habits.filter((item) => item.id !== habit.id);
+    setHabits(_habits);
+  });
 
-  handleReset = () => {
-    const habits = this.state.habits.map((habit) => {
+  const handleAdd = useCallback((name) => {
+    const _habits = [...habits, { id: Date.now(), name, count: 0 }];
+    setHabits(_habits);
+  });
+
+  const handleReset = useCallback(() => {
+    const _habits = habits.map((habit) => {
       if (habit.count !== 0) {
         return { ...habit, count: 0 };
-      } else {
-        return habit;
       }
+      return habit;
     });
-    this.setState({ habits });
-  };
+    setHabits(_habits);
+  });
 
-  render() {
-    return (
-      <>
-        <Navbar
-          habitCount={
-            this.state.habits.filter((habit) => habit.count > 0).length
-          }
-        />
-        <div className='habits'>
-          <Habits
-            habits={this.state.habits}
-            onIncrement={this.handleIncrement}
-            onDecrement={this.handleDecrement}
-            onDelete={this.handleDelete}
-            onAdd={this.handleAdd}
-            onReset={this.handleReset}
-          />
-        </div>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Navbar totalCount={habits.filter((item) => item.count > 0).length} />
+      <Habits
+        habits={habits}
+        onIncrement={handleIncrement}
+        onDecrement={handleDecrement}
+        onDelete={handleDelete}
+        onAdd={handleAdd}
+        onReset={handleReset}
+      />
+    </>
+  );
+};
 
 export default App;

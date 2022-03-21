@@ -1,46 +1,44 @@
-import React, { Component } from 'react';
+import React, { memo, useCallback } from 'react';
 import Habit from './habit';
 import HabitAddForm from './habitAddForm';
 
-class Habits extends Component {
-  handleIncrement = (habit) => {
-    this.props.onIncrement(habit);
-  };
+const Habits = memo((props) => {
+  const { habits, onIncrement, onDecrement, onDelete, onAdd, onReset } = props;
+  const handleIncrement = useCallback((habit) => {
+    onIncrement(habit);
+  });
 
-  handleDecrement = (habit) => {
-    this.props.onDecrement(habit);
-  };
+  const handleDecrement = useCallback((habit) => {
+    onDecrement(habit);
+  });
 
-  handleDelete = (habit) => {
-    this.props.onDelete(habit);
-  };
+  const handleDelete = useCallback((habit) => {
+    onDelete(habit);
+  });
 
-  handleAdd = (name) => {
-    this.props.onAdd(name);
-  };
+  const handleAdd = useCallback((name) => {
+    onAdd(name);
+  });
 
-  render() {
-    console.log('habits');
-    return (
-      <div className='habits'>
-        <HabitAddForm onAdd={this.handleAdd} />
-        <ul>
-          {this.props.habits.map((habit) => (
-            <Habit
-              key={habit.id}
-              habit={habit}
-              onIncrement={this.handleIncrement}
-              onDecrement={this.handleDecrement}
-              onDelete={this.handleDelete}
-            />
-          ))}
-        </ul>
-        <button className='habits-reset' onClick={this.props.onReset}>
-          Reset All
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className='habits'>
+      <HabitAddForm onAdd={handleAdd} />
+      <ul>
+        {habits.map((habit) => (
+          <Habit
+            key={habit.id}
+            habit={habit}
+            onIncrement={handleIncrement}
+            onDecrement={handleDecrement}
+            onDelete={handleDelete}
+          />
+        ))}
+      </ul>
+      <button className='habits-reset' onClick={onReset}>
+        Reset All
+      </button>
+    </div>
+  );
+});
 
 export default Habits;
