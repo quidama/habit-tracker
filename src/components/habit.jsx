@@ -4,15 +4,18 @@ class Habit extends PureComponent {
   handleIncrement = () => {
     this.props.onIncrement(this.props.habit);
   };
+
   handleDecrement = () => {
     this.props.onDecrement(this.props.habit);
   };
+
   handleDelete = () => {
     this.props.onDelete(this.props.habit);
   };
 
   render() {
     const { name, count } = this.props.habit;
+    console.log(`habit: ${name}`);
     return (
       <li className='habit'>
         <span className='habit-name'>{name}</span>

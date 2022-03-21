@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
-import Add from './add';
 import Habit from './habit';
+import HabitAddForm from './habitAddForm';
 
 class Habits extends Component {
   handleIncrement = (habit) => {
     this.props.onIncrement(habit);
   };
+
   handleDecrement = (habit) => {
     this.props.onDecrement(habit);
   };
+
   handleDelete = (habit) => {
     this.props.onDelete(habit);
   };
+
   handleAdd = (name) => {
     this.props.onAdd(name);
   };
-  handleReset = () => {
-    this.props.onReset();
-  };
 
   render() {
+    console.log('habits');
     return (
-      <>
-        <Add onAdd={this.handleAdd} />
+      <div className='habits'>
+        <HabitAddForm onAdd={this.handleAdd} />
         <ul>
           {this.props.habits.map((habit) => (
             <Habit
@@ -34,11 +35,10 @@ class Habits extends Component {
             />
           ))}
         </ul>
-        {/* 재사용되지 않는 부분은 component로 만들지 않는 것이 좋다. */}
-        <button className='habits-reset' onClick={this.handleReset}>
+        <button className='habits-reset' onClick={this.props.onReset}>
           Reset All
         </button>
-      </>
+      </div>
     );
   }
 }
