@@ -2,7 +2,7 @@ import React, { memo, useCallback } from 'react';
 import Habit from './habit';
 import HabitAddForm from './habitAddForm';
 
-const Habits = memo((props) => {
+const Habits = (props) => {
   const { habits, onIncrement, onDecrement, onDelete, onAdd, onReset } = props;
   const handleIncrement = useCallback((habit) => {
     onIncrement(habit);
@@ -39,6 +39,6 @@ const Habits = memo((props) => {
       </button>
     </div>
   );
-});
+};
 
 export default Habits;
